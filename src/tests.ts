@@ -12,7 +12,7 @@ export const testSuite = [
                 entityId: uuidv4() as UUID,
                 roomId: uuidv4() as UUID,
                 content: {
-                  text: 'search PayID andree',
+                  text: 'list all similar Pay(ID) for andree',
                   source: 'test',
                   actions: ['SEARCH_PAYID'],
                 },
@@ -24,8 +24,7 @@ export const testSuite = [
                 text: '',
               };
               let responseReceived = false;
-      
-              // Test the hello world action
+
               try {
                 await runtime.processActions(message, [], state, async (content: Content) => {
                   if (content.actions?.includes('SEARCH_PAYID')) {
@@ -36,6 +35,7 @@ export const testSuite = [
       
                 if (!responseReceived) {
                   const searchPayIDAction = runtime.actions.find((a) => a.name === 'SEARCH_PAYID');
+
                   if (searchPayIDAction) {
                     await searchPayIDAction.handler(
                       runtime,
@@ -43,6 +43,8 @@ export const testSuite = [
                       state,
                       {},
                       async (content: Content) => {
+                        console.log("SEARCH_PAYID_ACTION_RESPONSE:::", content)
+
                         if (content.actions?.includes('SEARCH_PAYID')) {
                           responseReceived = true;
                         }

@@ -15,7 +15,7 @@ export interface PayIDPluginConfig {
   }
   
   export interface SearchPayIdsRequest {
-    q: string;
+    search: string;
     limit?: number;
     activeOnly?: boolean;
   }

@@ -1,4 +1,5 @@
 import { Action, ActionExample, composePromptFromState, elizaLogger, IAgentRuntime, Memory, ModelType, parseJSONObjectFromText, State } from '@elizaos/core';
+import { PayIDService } from './provider';
 // import {
 //     // ClaimPayIdRequest,
 //     // SearchPayIdsRequest,
@@ -27,27 +28,11 @@ import { Action, ActionExample, composePromptFromState, elizaLogger, IAgentRunti
 //     }
 // })
 
-const searchPayIDTemplate = `Respond with a JSON markdown block containing only the extracted values. Use null for any values that cannot be determined.
-
-Example response:
-    \`\`\`json
-    {
-        "PayID": "fernando"
-    }
-    \`\`\`
-
-{{recentMessages}}
-
-Given the recent messages, extract or generate (come up with if not included) the following information about the requested search of PayID:
-- PayID
-
-If no search or PayID is mentioned, respond with null.`;
-
 // Action to search for PayIDs
 export const searchPayIds: Action = ({
     name: 'SEARCH_PAYID',
     similes: ['LOOKUP_PAYID', 'CHECK_PAYID'],
-    description: 'Performs a query of a PayID',
+    description: 'Performs a query of a Pay(ID)',
     validate: async () => true,
     handler: async (
         runtime: IAgentRuntime,
@@ -56,55 +41,52 @@ export const searchPayIds: Action = ({
         _options,
         callback
     ) => {
-        state = await runtime.composeState(message, [
-            ...(message.content.providers ?? []),
-            'RECENT_MESSAGES',
-        ]);
-        const response = await runtime.useModel(ModelType.TEXT_SMALL, {
-            prompt: composePromptFromState({
-              state,
-              template: searchPayIDTemplate,
-            }),
-          });
+        try {
+            state = await runtime.composeState(message, [
+                ...(message.content.providers ?? []),
+                'RECENT_MESSAGES',
+            ]);
+    
+            const searchPayIDTemplate = `What is the Pay(ID) the user wants to search about? Extract ONLY the word next to Pay(ID) from this message: "${message.content.text}". Return just the word next to Pay(ID) with no additional text, punctuation, or explanation.`
+    
+            const search = await runtime.useModel(ModelType.TEXT_SMALL, {
+                prompt: composePromptFromState({
+                  state,
+                  template: searchPayIDTemplate,
+                }),
+            });
+    
+            const s = new PayIDService(runtime);
+            const payIDList = await s.searchPayIds({ search });
+    
+            const responseContent = {
+                text: `Reveel Pay(ID) search results for "${search}"\n\nResults count: ${payIDList.length}\n\n${payIDList.map(payID => `Pay(ID): ${payID.name}, Email: ${payID.user.email}`).join('\n')}`,
+            };
+    
+            await callback?.(responseContent);
+    
+            return true;
+        } catch (error) {
+            console.log(error);
 
-        console.log('state', response);
-
-
-        // const responseContentObj = parseJSONObjectFromText(response);
-        // const responseContent = {
-        //     thought: responseContentObj.thought,
-        //     text: responseContentObj.message || '',
-        //     actions: ['SEARCH_PAY_ID'],
-        // };
-
-        await callback?.({
-            text: 'Search results here...',
-            actions: ['SEARCH_PAYID'],
-        });
-
-        return true;
+            return false;
+        }
     },
     examples: [
         [
             {
                 name: "{{user1}}",
                 content: {
-                    text: "search PayID fernando",
+                    text: "search Pay(ID) fernando",
                 },
-            },
-            {
-                name: "{{user2}}",
-                content: {
-                    text: "Searching PayID...",
-                },
-                actions: ['SEARCH_PAYID']
             },
             {
                 name: "{{user2}}",
                 content: {
                     text: "Search results here...",
-                }
-            },
+                },
+                actions: ['SEARCH_PAYID']
+            }
         ],
     ] as ActionExample[][],
 })

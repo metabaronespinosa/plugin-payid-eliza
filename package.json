@@ -31,8 +31,12 @@
   "dependencies": {
     "@elizaos/cli": "beta",
     "@elizaos/core": "beta",
+    "@elizaos/plugin-anthropic": "^1.0.0-beta.41",
     "@elizaos/plugin-bootstrap": "^1.0.0-beta.48",
     "@elizaos/plugin-local-ai": "^1.0.0-beta.48",
+    "@elizaos/plugin-openai": "^1.0.0-beta.48",
+    "@elizaos/plugin-pdf": "^1.0.0-beta.40",
+    "@elizaos/plugin-video-understanding": "^1.0.0-beta.40",
     "axios": "^1.9.0"
   },
   "devDependencies": {
@@ -52,9 +56,13 @@
   "agentConfig": {
     "pluginType": "elizaos:client:1.0.0",
     "pluginParameters": {
-      "FLOW_ADDRESS": {
+      "REVEEL_PAYID_API_KEY": {
         "type": "string",
-        "description": "Flow native address is required and must start with 0x"
+        "description": "REVEEL_PAYID_API_KEY"
+      },
+      "REVEEL_PAYID_BASE_URL": {
+        "type": "string",
+        "description": "REVEEL_PAYID_BASE_URL"
       }
     }
   },

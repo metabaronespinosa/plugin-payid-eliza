@@ -1,0 +1,67 @@
+{
+  "name": "plugin-payid-eliza",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "@elizaos/source": "./src/index.ts",
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup --format esm --dts",
+    "dev": "tsup --format esm --dts --watch",
+    "test": "vitest run",
+    "clean": "rm -rf dist",
+    "lint": "biome lint .",
+    "lint:fix": "biome check --apply .",
+    "format": "biome format .",
+    "format:fix": "biome format --write ."
+  },
+  "dependencies": {
+    "@elizaos/cli": "beta",
+    "@elizaos/core": "beta",
+    "@elizaos/plugin-bootstrap": "^1.0.0-beta.48",
+    "@elizaos/plugin-local-ai": "^1.0.0-beta.48",
+    "axios": "^1.9.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@elizaos/plugin-sql": "1.0.0-beta.48",
+    "@langchain/core": "0.0.2",
+    "tsup": "8.3.5",
+    "typescript": "^5.8.3",
+    "vitest": "^3.0.5"
+  },
+  "peerDependencies": {
+    "inversify": "6.2.1",
+    "reflect-metadata": "0.2.2",
+    "uuid": "11.0.3",
+    "zod": "3.24.2"
+  },
+  "agentConfig": {
+    "pluginType": "elizaos:client:1.0.0",
+    "pluginParameters": {
+      "FLOW_ADDRESS": {
+        "type": "string",
+        "description": "Flow native address is required and must start with 0x"
+      }
+    }
+  },
+  "packageType": "plugin",
+  "platform": "universal",
+  "repository": {
+    "type": "git",
+    "url": "github:metabaronespinosa/plugin-payid-eliza"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "v1": {
+    "packages": {}
+  },
+  "v2": {
+    "packages": {
+      "plugin-payid-eliza": {
+        "name": "plugin-payid-eliza",
+        "description": "",
+        "type": "module",
+        "versions": {
+          "0.0.1": {
+            "version": "0.0.1",
+            "runtimeVersion": "1.0.0-beta.48",
+            "platform": "universal",
+            "publishedAt": "2025-05-08T00:55:53.660Z",
+            "published": false
+          }
+        }
+      }
+    }
+  }
+}

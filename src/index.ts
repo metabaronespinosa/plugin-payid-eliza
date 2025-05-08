@@ -1,31 +1,33 @@
 import type { Plugin } from "@elizaos/core";
-import { PayIDService } from "./client.ts";
+import { searchPayID } from "./provider.ts";
 import {
-    claimPayId,
     searchPayIds,
-    getRoutes,
-    createRoute,
-    initTransaction,
-    deleteRoute,
-    getTransactionHistory,
-    checkRouteConflicts
+//     claimPayId,
+//     getRoutes,
+//     createRoute,
+//     initTransaction,
+//     deleteRoute,
+//     getTransactionHistory,
+//     checkRouteConflicts
 } from "./actions.ts";
+import { testSuite } from "./tests.ts";
 
 export const payIDPlugin: Plugin = {
-    name: "payid-eliza-plugin",
+    name: "plugin-payid-eliza",
     description: "Reveel PayID ElizaOS Plugin",
-    providers: [],
+    providers: [searchPayID],
     evaluators: [],
-    services: [PayIDService],
+    services: [],
+    tests: [...testSuite],
     actions: [
-        claimPayId,
         searchPayIds,
-        getRoutes,
-        createRoute,
-        initTransaction,
-        deleteRoute,
-        getTransactionHistory,
-        checkRouteConflicts
+        // claimPayId,
+        // getRoutes,
+        // createRoute,
+        // initTransaction,
+        // deleteRoute,
+        // getTransactionHistory,
+        // checkRouteConflicts
     ],
 };
 

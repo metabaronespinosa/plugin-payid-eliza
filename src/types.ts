@@ -15,7 +15,7 @@ export interface PayIDPluginConfig {
   }
   
   export interface SearchPayIdsRequest {
-    query: string;
+    q: string;
     limit?: number;
     activeOnly?: boolean;
   }
@@ -45,10 +45,13 @@ export interface PayIDPluginConfig {
   export interface PayId {
     id: string;
     name: string;
-    userId: string;
     status: 'ACTIVE' | 'INACTIVE';
     createdAt: string;
     updatedAt: string;
+    user: {
+      id: string;
+      email: string;
+    }
   }
   
   export interface TransactionInitialize {

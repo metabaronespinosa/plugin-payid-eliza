@@ -7,21 +7,15 @@ import {
   TransactionActivity,
   PayIdRoute,
   SupportedToken,
-  SupportedNetwork
+  SupportedNetwork,
+  PayId
 } from './types';
-import { IAgentRuntime, Service } from '@elizaos/core';
+import { Action, composeActionExamples, elizaLogger, formatActionNames, formatActions, IAgentRuntime, Memory, Provider, State } from '@elizaos/core';
 
-export class PayIDService extends Service {
+export class PayIDService {
   private client: AxiosInstance;
 
-  static serviceType = 'payid-service';
-  capabilityDescription = 'The agent is able to interact with Reveel Pay(ID)';
-
-  constructor() {
-    super();
-  }
-
-  start = async (runtime: IAgentRuntime): Promise<any> => {
+  constructor(private runtime: IAgentRuntime) {
     const apiKey = runtime.getSetting("REVEEL_PAYID_API_KEY");
     const baseURL = runtime.getSetting("REVEEL_PAYID_BASE_URL");
   
@@ -33,12 +27,10 @@ export class PayIDService extends Service {
       }
     });
 
-    const i = new PayIDService()
+    const i = new PayIDService(runtime)
 
     return i
   }
-
-  stop = async () => {}
 
   /**
    * Claim a PayID for a user
@@ -63,18 +55,18 @@ export class PayIDService extends Service {
   /**
    * Search for PayIDs
    */
-  async searchPayIds(params?: SearchPayIdsRequest): Promise<any> {
+  async searchPayIds(params?: SearchPayIdsRequest): Promise<PayId[]> {
     try {
       const response = await this.client.get('/pay-ids/search', {
         params: {
-          q: params.query,
+          q: params.q,
           limit: params.limit || 10,
           activeOnly: params.activeOnly || true
         }
       });
 
-      const { data } = response.data;
-      return data.payIds;
+      const payIds = response.data.results;
+      return payIds;
     } catch (error) {
       throw new Error(`Failed to search for PayIDs: ${error.message}`);
     }
@@ -237,3 +229,45 @@ export class PayIDService extends Service {
     );
   }
 }
+
+export const searchPayID: Provider = {
+  name: 'searchReveelPayID',
+  description: 'search a PayID',
+  dynamic: true,
+  position: -10,
+  get: async (runtime, _message, state) => {
+    try {
+      elizaLogger.info('searchPayID ||||||||||||||||||');
+      const s = new PayIDService(runtime);
+
+      // const payIds = await s.searchPayIds({ q: state.values.q });
+      const payIds = [{ name: "andree", user: { email: "andree@r3vl.xyz" } }]
+
+      let output = `PayID search results for "${1}"\n`;
+
+      output += `Results count: ${payIds.length}\n`;
+
+      output += '------------------------\n';
+
+      for (const payId of payIds) {
+        output += `PayID: ${payId.name}, Email: ${payId.user.email}\n`;
+      }
+
+      output += '------------------------\n';
+
+      return {
+        text: output,
+        values: {
+          payIds
+        },
+      };
+    } catch (error) {
+      throw new Error(`Failed to search PayID: ${error.message}`);
+
+      // return {
+      //   text: '',
+      //   values: {},
+      // };
+    }
+  },
+};

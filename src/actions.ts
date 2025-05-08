@@ -61,6 +61,7 @@ export const searchPayIds: Action = ({
     
             const responseContent = {
                 text: `Reveel Pay(ID) search results for "${search}"\n\nResults count: ${payIDList.length}\n\n${payIDList.map(payID => `Pay(ID): ${payID.name}, Email: ${payID.user.email}`).join('\n')}`,
+                actions: ['SEARCH_PAYID']
             };
     
             await callback?.(responseContent);

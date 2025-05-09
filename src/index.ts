@@ -1,16 +1,16 @@
 import type { Plugin } from "@elizaos/core";
-import { searchPayID } from "./provider.ts";
+import { searchPayID } from "./provider";
 import {
     searchPayIds,
-//     claimPayId,
+    claimPayId,
 //     getRoutes,
 //     createRoute,
 //     initTransaction,
 //     deleteRoute,
 //     getTransactionHistory,
 //     checkRouteConflicts
-} from "./actions.ts";
-import { testSuite } from "./tests.ts";
+} from "./actions";
+import { testSuite } from "./tests";
 
 export const payIDPlugin: Plugin = {
     name: "plugin-payid-eliza",
@@ -21,7 +21,7 @@ export const payIDPlugin: Plugin = {
     tests: [...testSuite],
     actions: [
         searchPayIds,
-        // claimPayId,
+        claimPayId,
         // getRoutes,
         // createRoute,
         // initTransaction,

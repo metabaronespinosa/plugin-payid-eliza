@@ -1,5 +1,5 @@
-import { Action, ActionExample, composePromptFromState, elizaLogger, IAgentRuntime, Memory, ModelType, parseJSONObjectFromText, State } from '@elizaos/core';
-import { PayIDService } from './provider';
+import { Action, ActionExample, composePromptFromState, IAgentRuntime, Memory, ModelType, State } from '@elizaos/core';
+import { PayIDService } from '../provider';
 // import {
 //     // ClaimPayIdRequest,
 //     // SearchPayIdsRequest,
@@ -11,22 +11,78 @@ import { PayIDService } from './provider';
 // import { PayIDService } from './provider';
 
 // // Action to claim a PayID
-// export const claimPayId: Action = ({
-//     name: "claimPayId",
-//     description: "claimPayId Action",
-//     validate: async () => true,
-//     handler: async (
-//         runtime: IAgentRuntime,
-//         _message: Memory,
-//         __state: State,
-//         _options: unknown,
-//         // params: ClaimPayIdRequest
-//     ) => {
-//         const payIdService = runtime.getService<PayIDService>(PayIDService.serviceType);
+export const claimPayId: Action = ({
+    name: 'CLAIM_PAYID',
+    similes: ['REGISTER_PAYID'],
+    description: 'Performs a claim of a Pay(ID)',
+    validate: async () => true,
+    handler: async (
+        runtime: IAgentRuntime,
+        message: Memory,
+        state: State,
+        _options,
+        callback
+    ) => {
+        try {
+            state = await runtime.composeState(message, [
+                ...(message.content.providers ?? []),
+                'RECENT_MESSAGES',
+            ]);
 
-//         return await payIdService.claimPayId(/* params */);
-//     }
-// })
+            const searchPayIDTemplate = `
+                ${message.content.text}.
+
+                From the above message extract the following information:
+                1. In one word, the name of the Pay(ID) to claim which is the word next to Pay(ID).
+                2. In one word, the user id of the owner of the Pay(ID).
+
+                Return the name of the Pay(ID) and user id separated by a comma.
+            `
+
+            const a = await runtime.useModel(ModelType.TEXT_SMALL, {
+                prompt: composePromptFromState({
+                  state,
+                  template: searchPayIDTemplate,
+                }),
+            });
+
+            const [name, userId] = a.split(',');
+
+            const s = new PayIDService(runtime);
+            await s.claimPayId({ name, userId });
+
+            const responseContent = {
+                text: `Pay(ID) ${name} successfully claimed`,
+                actions: ['CLAIM_PAYID']
+            };
+
+            await callback?.(responseContent);
+
+            return true;
+        } catch (error) {
+            console.log(error);
+
+            return false;
+        }
+    },
+    examples: [
+        [
+            {
+                name: "{{user1}}",
+                content: {
+                    text: "claim Pay(ID) fernando with user id 123-456-789",
+                },
+            },
+            {
+                name: "{{user2}}",
+                content: {
+                    text: "Pay(ID) fernando successfully claimed",
+                },
+                actions: ['CLAIM_PAYID']
+            }
+        ],
+    ] as ActionExample[][],
+})
 
 // Action to search for PayIDs
 export const searchPayIds: Action = ({

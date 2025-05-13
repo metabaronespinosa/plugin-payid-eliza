@@ -1,4 +1,4 @@
-import { Content, IAgentRuntime, Memory, ModelType, State, UUID } from "@elizaos/core";
+import { Content, IAgentRuntime, Memory, State, UUID } from "@elizaos/core";
 import { v4 as uuidv4 } from 'uuid';
 
 export const testSuite = [

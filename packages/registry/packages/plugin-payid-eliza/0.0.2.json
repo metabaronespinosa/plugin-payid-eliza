@@ -1,6 +1,6 @@
 {
   "name": "plugin-payid-eliza",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "type": "module",
   "platform": "universal",
@@ -9,7 +9,7 @@
   "maintainers": [
     "metabaronespinosa"
   ],
-  "publishedAt": "2025-05-13T05:02:10.151Z",
+  "publishedAt": "2025-05-13T05:04:22.207Z",
   "publishedBy": "metabaronespinosa",
   "dependencies": {
     "@elizaos/cli": "^1.0.0-beta.49",

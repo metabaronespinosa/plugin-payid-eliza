@@ -11,9 +11,16 @@
         "versions": {
           "0.0.1": {
             "version": "0.0.1",
-            "runtimeVersion": "1.0.0-beta.48",
+            "runtimeVersion": "1.0.0-beta.49",
             "platform": "universal",
-            "publishedAt": "2025-05-08T00:55:53.660Z",
+            "publishedAt": "2025-05-13T05:02:10.151Z",
+            "published": false
+          },
+          "0.0.2": {
+            "version": "0.0.2",
+            "runtimeVersion": "1.0.0-beta.49",
+            "platform": "universal",
+            "publishedAt": "2025-05-13T05:04:22.207Z",
             "published": false
           }
         }

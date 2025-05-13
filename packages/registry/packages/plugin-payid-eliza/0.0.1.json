@@ -1,0 +1,23 @@
+{
+  "name": "plugin-payid-eliza",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "platform": "universal",
+  "runtimeVersion": "1.0.0-beta.48",
+  "repository": "github:metabaronespinosa/plugin-payid-eliza",
+  "maintainers": [
+    "metabaronespinosa"
+  ],
+  "publishedAt": "2025-05-08T00:55:53.660Z",
+  "publishedBy": "metabaronespinosa",
+  "dependencies": {
+    "@elizaos/cli": "^1.0.0-beta.48",
+    "@elizaos/core": "^1.0.0-beta.48",
+    "@elizaos/plugin-bootstrap": "^1.0.0-beta.48",
+    "@elizaos/plugin-local-ai": "^1.0.0-beta.48",
+    "axios": "^1.9.0"
+  },
+  "tags": [],
+  "license": "UNLICENSED"
+}

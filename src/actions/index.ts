@@ -2,6 +2,7 @@ import { Action, ActionExample, composePromptFromState, IAgentRuntime, Memory, M
 import { PayIDService } from '../apiClient';
 import { getSupportedNetworks, getSupportedTokens } from '../utils';
 import { SupportedNetwork, SupportedToken } from '../types';
+import { sendTx } from '../viem';
 
 
 // // Action to claim a PayID
@@ -144,7 +145,7 @@ export const searchPayIds: Action = ({
 
 // Action to initialize a transaction
 export const initTransaction: Action = ({
-    name: 'INIT_TX_PAYID',
+    name: 'SEND_TX_PAYID',
     similes: [],
     description: 'Performs a transaction to a Pay(ID)',
     validate: async () => true,
@@ -208,14 +209,18 @@ export const initTransaction: Action = ({
                 network: responseContentObj.network,
                 recipientPayId: responseContentObj.recipient
             });
+
+            const hash = await sendTx(responseContentObj.network, response.tx)
     
             const responseContent = {
                 text: `
-                    Successfully initialized transaction:
+                    Funds sent successfully:
 
                     ${JSON.stringify(response, null, 2)}
+
+                    Transaction hash: ${hash}
                 `,
-                actions: ['INIT_TX_PAYID']
+                actions: ['SEND_TX_PAYID']
             };
     
             await callback?.(responseContent);
@@ -240,7 +245,7 @@ export const initTransaction: Action = ({
                 content: {
                     text: "Successfully initialized transaction:",
                 },
-                actions: ['INIT_TX_PAYID']
+                actions: ['SEND_TX_PAYID']
             }
         ],
     ] as ActionExample[][],

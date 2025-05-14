@@ -134,7 +134,7 @@ export const testSuite = [
                         content: {
                             text: 'Send 69 USDT from 123-456-789 to Pay(ID) fernando on the BASE network',
                             source: 'test',
-                            actions: ['INIT_TX_PAYID'],
+                            actions: ['SEND_TX_PAYID'],
                         },
                     };
                     
@@ -147,14 +147,14 @@ export const testSuite = [
                     
                     try {
                         await runtime.processActions(message, [], state, async (content: Content) => {
-                            if (content.actions?.includes('INIT_TX_PAYID')) {
+                            if (content.actions?.includes('SEND_TX_PAYID')) {
                                 responseReceived = true;
                             }
                             return [];
                         });
                         
                         if (!responseReceived) {
-                            const searchPayIDAction = runtime.actions.find((a) => a.name === 'INIT_TX_PAYID');
+                            const searchPayIDAction = runtime.actions.find((a) => a.name === 'SEND_TX_PAYID');
                             
                             if (searchPayIDAction) {
                                 await searchPayIDAction.handler(
@@ -163,8 +163,8 @@ export const testSuite = [
                                     state,
                                     {},
                                     async (content: Content) => {                                        
-                                        if (content.actions?.includes('INIT_TX_PAYID')) {
-                                            console.log("INIT_TX_PAYID_ACTION_RESPONSE:::", content)
+                                        if (content.actions?.includes('SEND_TX_PAYID')) {
+                                            console.log("SEND_TX_PAYID_ACTION_RESPONSE:::", content)
 
                                             responseReceived = true;
                                         }
@@ -173,15 +173,15 @@ export const testSuite = [
                                     []
                                 );
                             } else {
-                                throw new Error('INIT_TX_PAYID action not found in runtime.actions');
+                                throw new Error('SEND_TX_PAYID action not found in runtime.actions');
                             }
                         }
                         
                         if (!responseReceived) {
-                            throw new Error('INIT_TX_PAYID action did not produce expected response');
+                            throw new Error('SEND_TX_PAYID action did not produce expected response');
                         }
                     } catch (error) {
-                        throw new Error(`INIT_TX_PAYID action test failed: ${error.message}`);
+                        throw new Error(`SEND_TX_PAYID action test failed: ${error.message}`);
                     }
                 },
             },

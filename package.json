@@ -27,7 +27,8 @@
     "lint:fix": "biome check --apply .",
     "format": "biome format .",
     "format:fix": "biome format --write .",
-    "eliza:test": "npx @elizaos/cli test"
+    "eliza:test": "npx @elizaos/cli test",
+    "eliza:agent": "npx @elizaos/cli start -char src/character.json"
   },
   "dependencies": {
     "@elizaos/cli": "^1.0.0-beta.49",
